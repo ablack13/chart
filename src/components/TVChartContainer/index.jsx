@@ -5,9 +5,11 @@ import Datafeed from './api/';
 
 const INTERVAL = {
   MINUTE: '1',
+  MINUTES_3: '3',
   MINUTES_5: '5',
   MINUTES_15: '15',
   MINUTES_30: '30',
+  MINUTES_45: '45',
   HOUR: '60',
   HOURS_3: '180',
   HOURS_6: '360',
@@ -31,8 +33,8 @@ const TIME_FRAMES = [
 export class TVChartContainer extends React.PureComponent {
 
   static defaultProps = {
-    symbol: 'BTC/USD',
-    interval: '15',
+    symbol: 'XBTUSD/USD',
+    interval: '5',
     containerId: 'tv-chart',
     libraryPath: "/charting_library/",
     chartsStorageUrl: 'https://saveload.tradingview.com',
@@ -54,8 +56,9 @@ export class TVChartContainer extends React.PureComponent {
       container_id: this.props.containerId,
       library_path: this.props.libraryPath,
       locale: 'en',
-      disabled_features: ['use_localstorage_for_settings'],
-      enabled_features: ['study_templates', 'hide_left_toolbar_by_default'],
+      load_last_chart: true,
+      disabled_features: [],
+      enabled_features: ['use_localstorage_for_settings'],
       disabledDrawings: true,
       charts_storage_url: this.props.chartsStorageUrl,
       charts_storage_api_version: this.props.chartsStorageApiVersion,
@@ -72,6 +75,7 @@ export class TVChartContainer extends React.PureComponent {
     };
     window.TradingView.onready(() => {
       const widget = window.tvWidget = new window.TradingView.widget(widgetOptions);
+
       widget.onChartReady(() => {
         widget.createButton()
           .attr('title', 'Select or Search Pairings')
